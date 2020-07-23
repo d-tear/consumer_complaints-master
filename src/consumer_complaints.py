@@ -98,11 +98,13 @@ def generate_report(path_to_csv, output_dir):
        
        company = sorted_data[row_counter]['Company']
        
-       year = sorted_data[row_counter]['Date received']
+       date = sorted_data[row_counter]['Date received']
+       
+       year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
        
        product = sorted_data[row_counter]['Product']
        
-       #if the year hasnt changed, we are still  need to summarize product data for the current year
+       #if the year hasnt changed
        if year == current_year:
            
            #if year and product are the same, update our metrics for that product for this year
@@ -124,7 +126,8 @@ def generate_report(path_to_csv, output_dir):
            #so we need to create the row data for this product of this year, AND update our product collection variables
            #We DONT need to update the year
            else:
-               row_data = [current_product, current_year, product_complaint_counter, len(at_least_one_complaint),max_percentage(bad_companies)]
+               row_data = [current_product, current_year, product_complaint_counter, 
+                           len(at_least_one_complaint),max_percentage(bad_companies)]
                
                #append our inner list to summarized data nest list
                summarized_data.append(row_data)
@@ -142,12 +145,36 @@ def generate_report(path_to_csv, output_dir):
                
                #and clear our set of companies that had at least one complaint
                at_least_one_complaint.clear()
-               
-               
-    
-              
         
-       # row_counter += 1
+        #we get here if the year has changed. Now we need to update our product AND year variables
+       else:
+           #but first add our existing summarized data for the current product and year
+           row_data = [current_product, current_year, product_complaint_counter, 
+                       len(at_least_one_complaint),max_percentage(bad_companies)]
+           
+           #append our inner list to summarized data nest list
+           summarized_data.append(row_data)
+            
+            ##Now we need to update our product collection variables.##
+            
+           #update the current product
+           current_product = sorted_data[row_counter]['Product']
+           
+           #update current year
+           current_year = year
+            
+            #clear our list of bad companies
+           bad_companies.clear()
+            
+            #reset our number of product complaints to zero
+           product_complaint_counter = 0
+            
+            #and clear our set of companies that had at least one complaint
+           at_least_one_complaint.clear()
+           
+           
+           
+    row_counter += 1
     
                
                

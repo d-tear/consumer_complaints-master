@@ -345,13 +345,12 @@ def generate_report(path_to_csv, output_dir):
            
         writer.writerows( summarized_data)       
            
-    #return summarized_data      
+        
 
     
-start = time.time()              
+             
 generate_report("/Users/davidtyrpak/Downloads/complaints.csv", "/Users/davidtyrpak/Desktop")              
-end = time.time()
-print(end - start)               
+           
        
        
        

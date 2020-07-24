@@ -1,5 +1,7 @@
 #!/bin/bash
 #
-# Use this shell script to compile (if necessary) your code and then execute it. Below is an example of what might be found in this file if your program was written in Python 3.7
+# You can use this shell script to generate the ./output/results.csv file
+# Note that this bash script assumes you are currently inside the top level directory
+# and it assumes you have a file named complaints.csv located inside ./input directory
 
 python3.7 ./src/consumer_complaints.py ./input/complaints.csv ./output/results.csv

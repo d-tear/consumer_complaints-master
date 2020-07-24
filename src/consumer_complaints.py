@@ -108,8 +108,8 @@ def generate_report(path_to_csv, output_dir):
         
         new_product = sorted_data[row_counter]['Product']
         
-        #if the year hasnt changed
-        if new_year == current_year:
+        #if the year hasnt changed AND we are not on the final row
+        if new_year == current_year and row_counter <= (len(sorted_data) - 1):
             
             #if year and product are the same, update our metrics for that product for this year
             if new_product == current_product:
@@ -163,8 +163,8 @@ def generate_report(path_to_csv, output_dir):
                 #update the current product
                 current_product = new_product
          
-         #we get here if the year has changed. Now we need to update our product AND year variables
-        else:
+         #if the year has changed AND we are not on the final row, we need to update our product AND year variables
+        if new_year != current_year and row_counter <= (len(sorted_data) - 1):
             
             
             
@@ -202,8 +202,26 @@ def generate_report(path_to_csv, output_dir):
             
             #update current year
             current_year = new_year
-             
-             
+        
+         #if we are on the final row, we need to add our product data before we finish
+        if row_counter == (len(sorted_data) - 1):
+            
+            product_complaint_counter += 1
+                
+                
+            #append the company to the list of bad companies for that product and year
+            bad_companies.append(company)
+                
+            if company not in at_least_one_complaint:
+                    
+                 at_least_one_complaint.add(company)
+            else:
+                pass
+            
+            row_data = [current_product, current_year, product_complaint_counter, 
+                        len(at_least_one_complaint),max_percentage(bad_companies)]
+            
+            
    
     #output results csv file into the directory specified by output_dir
     results_location = os.path.join(output_dir, "results.csv")

@@ -139,6 +139,14 @@ def generate_report(path_to_csv, output_dir):
             #append our inner list to summarized data nest list
             summarized_data.append(row_data)
             
+            #maintain sort order
+            summarized_data.sort(key = lambda row: row[0])
+            
+            #The final results file has to be sorted in alphabetical order by Product name.
+            #So, we'll sort in place by Product (index 0) each time we append new data. 
+            #In practice, I find this is much fatser than doing one big sort at the very end
+            summarized_data.sort(key = lambda row: row[0])
+            
             ##Now we need to clear AND update our product collection variables.##
             
             #clear
@@ -175,6 +183,9 @@ def generate_report(path_to_csv, output_dir):
             
             #append our inner list to summarized data nest list
             summarized_data.append(row_data)
+            
+            #maintain sort order
+            summarized_data.sort(key = lambda row: row[0])
              
              ##Now we need to clear AND update our product collection and year variables.##
              
@@ -226,6 +237,9 @@ def generate_report(path_to_csv, output_dir):
                             len(at_least_one_complaint),max_percentage(bad_companies)]
                 
                 summarized_data.append(row_data)
+                
+                #maintain sort order
+                summarized_data.sort(key = lambda row: row[0])
             
             #if the final row keeps the year the same but changes the product, we need to add data for current_product AND new product
             elif new_year == current_year and new_product != current_product:
@@ -235,6 +249,8 @@ def generate_report(path_to_csv, output_dir):
                 
                 summarized_data.append(row_data)
                 
+                #maintain sort order
+                summarized_data.sort(key = lambda row: row[0])
                 
                 #clear
                 #----------------------------------------
@@ -265,6 +281,9 @@ def generate_report(path_to_csv, output_dir):
                 
                 summarized_data.append(row_data)
                 
+                #maintain sort order
+                summarized_data.sort(key = lambda row: row[0])
+                
             elif new_year != current_year:
                 
                 #but first add our existing summarized data for the current product and current year
@@ -273,6 +292,9 @@ def generate_report(path_to_csv, output_dir):
                 
                 #append our inner list to summarized data nest list
                 summarized_data.append(row_data)
+                
+                #maintain sort order
+                summarized_data.sort(key = lambda row: row[0])
                  
                  ##Now we need to clear AND update our product collection and year variables.##
                  
@@ -308,20 +330,13 @@ def generate_report(path_to_csv, output_dir):
                 
                 summarized_data.append(row_data)
                 
+                #maintain sort order
+                summarized_data.sort(key = lambda row: row[0])
                 
-                
-                
-                
-                
+
    
     #output results.csv file into the directory specified by output_dir
     results_location = os.path.join(output_dir, "results.csv")
-    
-   #the results.csv file needs to be sorted alphabetically by Product.
-   #To save memory, we can do an in place sort on summarized_data:
-   #summarized_data.sort( key = lambda row: row[0])
-   
-    summarized_data.sort(key = lambda row: row[0])
     
     
     with open(results_location, 'w', newline='') as csvfile:

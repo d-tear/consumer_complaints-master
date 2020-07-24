@@ -81,7 +81,7 @@ def generate_report(path_to_csv, output_dir):
         #sorted_data is a list of OrderedDicts
         #Each OrderedDict has column names as keys, and corresponding row data as values. We have as many OrderderedDicts as we have rows
         #in the input csv file
-        print(sorted_data)
+        
     #grab the very first Year and Product, both should be sorted in numeric/alphabetical order 
     current_date = sorted_data[0]['Date received']
     
@@ -325,7 +325,7 @@ def generate_report(path_to_csv, output_dir):
 
     
                
-generate_report("/Users/davidtyrpak/Desktop/consumer_complaints.csv", "/Users/davidtyrpak/Desktop")              
+generate_report("/Users/davidtyrpak/Downloads/complaints.csv", "/Users/davidtyrpak/Desktop")              
                
        
        

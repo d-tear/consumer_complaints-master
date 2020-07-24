@@ -10,6 +10,8 @@ import csv
 
 import sys
 
+import os
+
 from collections import Counter
 
 
@@ -44,140 +46,177 @@ def max_percentage(input_list):
 
 def generate_report(path_to_csv, output_dir):
     
-   """ 
-   Generates a summarized consumer complaint report
+    """ 
+    Generates a summarized consumer complaint report
    
-   Arguments
-   -------------------------------
+    Arguments
+    -------------------------------
    
-   path_to_csv : string type, the path to the csv file of consumer complaints
+    path_to_csv : string type, the path to the csv file of consumer complaints
    
-   output_dir: string type, the path to the output directory where the report should be generated
+    output_dir: string type, the path to the output directory where the report should be generated
    
-   Returns
+    Returns
    -------------------------
    
-   A nested list of summarized complaints, where each inner list is the summerized data for one finanical product on
-   a given year.
+    A nested list of summarized complaints, where each inner list is the summerized data for one finanical product on
+    a given year.
    
-   This function also writes the nested list to a csv file inside output_dir
+    This function also writes the nested list to a csv file inside output_dir
    
-   """
+    """
    
-   summarized_data = [] # a nested list, and each inner list is a row of summarized data 
+    summarized_data = [] # a nested list, and each inner list is a row of summarized data 
    
    
    
-   with open(path_to_csv, 'r', newline='') as f_input:
-    csv_input = csv.DictReader(f_input)
-    
-    #a stable sort of 'Date recived' and then 'Product' will allow us to summarize data over each year and product for that year
-    sorted_data = sorted(csv_input, key = lambda row: (row['Date received'], row['Product'])) 
-    #sorted_data is a list of OrderedDicts
-    #Each OrderedDict has column names as keys, and corresponding row data as values. We have as many OrderderedDicts as we have rows
-    #in the input csv file
-    
-   #grab the very first Year and Product, both should be sorted in numeric/alphabetical order 
-   current_date = sorted_data[0]['Date received']
-
-   current_year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
-   
-   current_product = sorted_data[0]['Product']
-   
-   row_counter = 0 #use this to loop through each OrderedDict/row 
-   
-   product_complaint_counter = 0 #total number of complaints received for that product and year
-   
-   at_least_one_complaint = set() #total number of companies receiving at least one complaint for that product and year
-   
-   bad_companies = [] # add a company to this list each time find a complaint for the given year and given product. 
-   #The worst company is the one repeated the most in this list
-   
-   #iterate through each row of the dataset
-   while row_counter < len(sorted_data):
+    with open(path_to_csv, 'r', newline='') as f_input:
        
-       company = sorted_data[row_counter]['Company']
-       
-       date = sorted_data[row_counter]['Date received']
-       
-       year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
-       
-       product = sorted_data[row_counter]['Product']
-       
-       #if the year hasnt changed
-       if year == current_year:
-           
-           #if year and product are the same, update our metrics for that product for this year
-           if product == current_product:
-               
-               product_complaint_counter += 1
-               
-               
-               #append the company to the list of bad companies for that product and year
-               bad_companies.append(company)
-               
-               if company not in at_least_one_complaint:
-                   
-                   at_least_one_complaint.add(company)
-               else:
-                   pass
-            
-           #if we make it here, we have iterated through all rows of the current product for the current year.
-           #so we need to create the row data for this product of this year, AND update our product collection variables
-           #We DONT need to update the year
-           else:
-               row_data = [current_product, current_year, product_complaint_counter, 
-                           len(at_least_one_complaint),max_percentage(bad_companies)]
-               
-               #append our inner list to summarized data nest list
-               summarized_data.append(row_data)
-               
-               ##Now we need to update our product collection variables.##
-               
-               #update the current product
-               current_product = sorted_data[row_counter]['Product']
-               
-               #clear our list of bad companies
-               bad_companies.clear()
-               
-               #reset our number of product complaints to zero
-               product_complaint_counter = 0
-               
-               #and clear our set of companies that had at least one complaint
-               at_least_one_complaint.clear()
+        csv_input = csv.DictReader(f_input)
         
-        #we get here if the year has changed. Now we need to update our product AND year variables
-       else:
-           #but first add our existing summarized data for the current product and year
-           row_data = [current_product, current_year, product_complaint_counter, 
-                       len(at_least_one_complaint),max_percentage(bad_companies)]
-           
-           #append our inner list to summarized data nest list
-           summarized_data.append(row_data)
+        #a stable sort of year and then 'Product' will allow us to summarize data over each year and product for that year
+        #To grab yyyy from 'Date recieved': row['Date received'].split('-')[0] 
+        
+        sorted_data = sorted(csv_input, key = lambda row: (row['Date received'].split('-')[0], row['Product'])) 
+        #sorted_data is a list of OrderedDicts
+        #Each OrderedDict has column names as keys, and corresponding row data as values. We have as many OrderderedDicts as we have rows
+        #in the input csv file
+        print(sorted_data)
+    #grab the very first Year and Product, both should be sorted in numeric/alphabetical order 
+    current_date = sorted_data[0]['Date received']
+    
+    current_year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
+    
+    current_product = sorted_data[0]['Product']
+    
+    
+    product_complaint_counter = 0 #total number of complaints received for that product and year
+    
+    at_least_one_complaint = set() #total number of companies receiving at least one complaint for that product and year
+    
+    bad_companies = [] # add a company to this list each time find a complaint for the given year and given product. 
+    #The worst company is the one repeated the most in this list
+   
+    #iterate through each row of the dataset
+    for row_counter in range(0, len(sorted_data), 1):
+        
+        company = sorted_data[row_counter]['Company']
+        
+        new_date = sorted_data[row_counter]['Date received']
+        
+        new_year = new_date.split('-')[0] #grab yyyy from yyyy-mm-dd
+        
+        new_product = sorted_data[row_counter]['Product']
+        
+        #if the year hasnt changed
+        if new_year == current_year:
             
-            ##Now we need to update our product collection variables.##
+            #if year and product are the same, update our metrics for that product for this year
+            if new_product == current_product:
+                
+                product_complaint_counter += 1
+                
+                
+                #append the company to the list of bad companies for that product and year
+                bad_companies.append(company)
+                
+                if company not in at_least_one_complaint:
+                    
+                    at_least_one_complaint.add(company)
+                else:
+                    pass
+             
+            #if we make it here, we have iterated through all rows of the current product for the current year.
+            #so we need to create the row data for this product of this year, AND update our product collection variables
+            #We DONT need to update the year
+            else:
+                
+                #at this point, the new_product variable is different fron current_product, which was the previous row(s)
+                #we need to add our summarized data for current_product before 
+                row_data = [current_product, current_year, product_complaint_counter, 
+                            len(at_least_one_complaint),max_percentage(bad_companies)]
+                
+                #append our inner list to summarized data nest list
+                summarized_data.append(row_data)
+                
+                ##Now we need to clear AND update our product collection variables.##
+                
+                #clear
+                #------------------------
+                #clear our list of bad companies
+                bad_companies.clear()
+                
+                #reset our number of product complaints to zero
+                product_complaint_counter = 0
+                
+                #and clear our set of companies that had at least one complaint
+                at_least_one_complaint.clear()
+                
+                #update
+                #----------------------------------------
+                bad_companies.append(company)
+                
+                product_complaint_counter += 1
+                
+                at_least_one_complaint.add(company)
+                
+                #update the current product
+                current_product = new_product
+         
+         #we get here if the year has changed. Now we need to update our product AND year variables
+        else:
             
-           #update the current product
-           current_product = sorted_data[row_counter]['Product']
-           
-           #update current year
-           current_year = year
             
-            #clear our list of bad companies
-           bad_companies.clear()
             
+            #but first add our existing summarized data for the current product and current year
+            row_data = [current_product, current_year, product_complaint_counter, 
+                        len(at_least_one_complaint),max_percentage(bad_companies)]
+            
+            #append our inner list to summarized data nest list
+            summarized_data.append(row_data)
+             
+             ##Now we need to clear AND update our product collection variables.##
+             
+             #clear
+             #---------------------------------------------------
+             
+             #clear our list of bad companies
+            bad_companies.clear()
+                
             #reset our number of product complaints to zero
-           product_complaint_counter = 0
-            
+            product_complaint_counter = 0
+                
             #and clear our set of companies that had at least one complaint
-           at_least_one_complaint.clear()
+            at_least_one_complaint.clear()
+            
+            #update
+            #---------------------------------------------------
+            bad_companies.append(company)
+                
+            product_complaint_counter += 1
+                
+            at_least_one_complaint.add(company)
+                
+            #update the current product
+            current_product = new_product
+            
+            #update current year
+            current_year = new_year
+             
+             
+   
+    #output results csv file into the directory specified by output_dir
+    results_location = os.path.join(output_dir, "results.csv")
+    
+    with open(results_location, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(summarized_data)        
            
-           
-           
-    row_counter += 1
+    return summarized_data      
+
     
                
-               
+generate_report("/Users/davidtyrpak/Desktop/consumer_complaints.csv", "/Users/davidtyrpak/Desktop")              
                
        
        

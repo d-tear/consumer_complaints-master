@@ -5,13 +5,11 @@ Created on Mon Jul 20 19:05:23 2020
 
 @author: davidtyrpak
 """
-import time
+
 
 import csv
 
 import sys
-
-import os
 
 from collections import Counter
 
@@ -46,7 +44,7 @@ def max_percentage(input_list):
 
 
 
-def generate_report(path_to_csv, output_dir):
+def generate_report(input_csv_file, output_csv_file):
     
     """ 
     Generates a summarized consumer complaint report
@@ -54,9 +52,9 @@ def generate_report(path_to_csv, output_dir):
     Arguments
     -------------------------------
    
-    path_to_csv : string type, the path to the csv file of consumer complaints
+    input_csv_file : string type, the path to the csv file of consumer complaints ("/Users/davidtyrpak/Desktop/consumer_complaints.csv")
    
-    output_dir: string type, the path to the output directory where the report should be generated
+    output_csv_file: string type, the path (including filename) where the report should be generated (e.g. /"Users/davidtyrpak/Desktop/results.csv")
    
     Returns
    -------------------------
@@ -72,7 +70,7 @@ def generate_report(path_to_csv, output_dir):
    
    
    
-    with open(path_to_csv, 'r', newline='') as f_input:
+    with open(input_csv_file, 'r', newline='') as f_input:
        
         csv_input = csv.DictReader(f_input)
         
@@ -335,11 +333,8 @@ def generate_report(path_to_csv, output_dir):
                 
 
    
-    #output results.csv file into the directory specified by output_dir
-    results_location = os.path.join(output_dir, "results.csv")
     
-    
-    with open(results_location, 'w', newline='') as csvfile:
+    with open(output_csv_file, 'w', newline='') as csvfile:
         
         writer = csv.writer(csvfile)
            
@@ -349,11 +344,23 @@ def generate_report(path_to_csv, output_dir):
 
     
              
-generate_report("/Users/davidtyrpak/Downloads/complaints.csv", "/Users/davidtyrpak/Desktop")              
+#generate_report("/Users/davidtyrpak/Downloads/complaints.csv", "/Users/davidtyrpak/Desktop")              
            
        
        
-       
+def main():
+
+    input_file = sys.argv[1]  
+
+    output_file =  sys.argv[2]   
+    
+    generate_report(input_file, output_file)  
+
+if __name__ == '__main__':
+
+    main()            
+
+    
       
    
    

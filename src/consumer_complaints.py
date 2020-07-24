@@ -5,6 +5,7 @@ Created on Mon Jul 20 19:05:23 2020
 
 @author: davidtyrpak
 """
+import time
 
 import csv
 
@@ -13,6 +14,7 @@ import sys
 import os
 
 from collections import Counter
+
 
 
 def max_percentage(input_list):
@@ -311,22 +313,30 @@ def generate_report(path_to_csv, output_dir):
                 
                 
                 
-            
-            
    
-    #output results csv file into the directory specified by output_dir
+    #output results.csv file into the directory specified by output_dir
     results_location = os.path.join(output_dir, "results.csv")
     
+   #the results.csv file needs to be sorted alphabetically by Product.
+   #To save memory, we can do an in place sort on summarized_data:
+   #summarized_data.sort( key = lambda row: row[0])
+   
+    summarized_data.sort(key = lambda row: row[0])
+    
+    
     with open(results_location, 'w', newline='') as csvfile:
+        
         writer = csv.writer(csvfile)
-        writer.writerows(summarized_data)        
            
-    return summarized_data      
+        writer.writerows( summarized_data)       
+           
+    #return summarized_data      
 
     
-               
+start = time.time()              
 generate_report("/Users/davidtyrpak/Downloads/complaints.csv", "/Users/davidtyrpak/Desktop")              
-               
+end = time.time()
+print(end - start)               
        
        
        

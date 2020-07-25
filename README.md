@@ -35,7 +35,7 @@ Although the example complaints.csv file is small, a real dataset may contain hu
 
 To ensure that the final results file is organized alphabetically by product name, a nested list of product info for each year is sorted by product name each time new summarized data is added. In practice, I found this approach approx. 3X faster than doing one large sort at the end, and it required a smaller memory footprint. However, this maintained alphabetical ordering could also likely be achieved with a heap/priority queue structure and future work should explore that approach.
 
-Note that the problem solving code is located in the `generate_report` function inisde `consumer_complaints.py`
+Note that the problem solving code is located in the `generate_report` function inside `consumer_complaints.py`
 
 
 

@@ -6,6 +6,7 @@ Created on Mon Jul 20 19:05:23 2020
 @author: davidtyrpak
 """
 
+import os
 
 import csv
 
@@ -13,6 +14,23 @@ import sys
 
 from collections import Counter
 
+
+def file_is_empty(path_to_file):
+    """
+    Check if a given file is empty
+    
+    Parameters
+    ----------
+    path_to_file : string type, the path to the file ("/Users/davidtyrpak/Desktop//my_file.csv")
+
+    Returns
+    -------
+    True if file is empty., False if not
+
+    """
+    
+    return os.stat(path_to_file).st_size == 0
+    
 
 
 def max_percentage(input_list):
@@ -67,6 +85,10 @@ def generate_report(input_csv_file, output_csv_file):
    
     """
    
+    #ensure input_csv_file has a non-zero size/ is not empty
+    if file_is_empty(input_csv_file):
+        raise IOError(f"Warning! {input_csv_file} is empty! Please ensure you have the correct file path and that the file is not empty.")
+    
     summarized_data = [] # a nested list, and each inner list is a row of summarized data 
    
    

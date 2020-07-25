@@ -6,6 +6,8 @@ Created on Mon Jul 20 19:05:23 2020
 @author: davidtyrpak
 """
 
+import re
+
 import os
 
 import csv
@@ -13,6 +15,46 @@ import csv
 import sys
 
 from collections import Counter
+
+
+
+def is_correct_date_format(date):
+    
+    """
+    Ensures date is in the correct format of yyyy-mm-dd or yyyy-dd-mm
+    
+    Some examples of incorrect format: 
+        
+    1) yyyy/mm/dd (using slashes instead of hyphens)
+    
+    2) yy-mm-dd (using 2 digits instead of 4 digits for year)
+    
+    Parameters
+    ----------
+    date : string type, e.g. "2019-09-24"
+    (assumes yyyy-mm-dd or yyyy-dd-mm --> Note that this code DOESNT check yyyy-dd-mm vs yyyy-mm-dd)
+    The code only assumes you have 4 digits, followed by a hyphen, then two digits, a hyphen, and then two digits
+
+    Returns
+    -------
+    True if date is yyyy-mm-dd or yyyy-dd-mm
+    False if not
+
+    """
+    
+    #find beginning of line, then 4 digits, then a hyphen, then 2 digits, 
+    #then a hyphen, then 2 digits, and then the end of the ine
+    date_pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    
+    x = re.search(date_pattern, date)
+    
+    #if the pattern doesnt match the txt, x will be None
+    if x is not None:
+        return True
+    else:
+        return False
+
+
 
 
 def file_is_empty(path_to_file):
@@ -108,6 +150,16 @@ def generate_report(input_csv_file, output_csv_file):
     #grab the very first Year and Product, both should be sorted in numeric/alphabetical order 
     current_date = sorted_data[0]['Date received']
     
+    #ensure current_date is in format yyyy-mm-dd or yyyy-dd-mm
+    if is_correct_date_format(current_date):
+        pass
+    else:
+        print(f"Warning! The dates of the 'Date recieved' column of {input_csv_file} are not in the correct format")
+        print("The correct format is yyyy-mm-dd or yyyy-dd-mm")
+        print("Common incorrect formats are yy-mm-dd or yyyy/mm/dd")
+        print(f"Your incorrect date was {current_date}")
+        raise ValueError()
+    
     current_year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
     
     current_product = sorted_data[0]['Product']
@@ -126,6 +178,16 @@ def generate_report(input_csv_file, output_csv_file):
         company = sorted_data[row_counter]['Company']
         
         new_date = sorted_data[row_counter]['Date received']
+        
+        #ensure new_date is in format yyyy-mm-dd or yyyy-dd-mm
+        if is_correct_date_format(new_date):
+            pass
+        else:
+            print(f"Warning! The dates of the 'Date recieved' column of {input_csv_file} are not in the correct format")
+            print("The correct format is yyyy-mm-dd or yyyy-dd-mm. Ensure all dates are in this format")
+            print("Common incorrect formats are yy-mm-dd or yyyy/mm/dd")
+            print(f"Your incorrect date was {new_date}")
+            raise ValueError()
         
         new_year = new_date.split('-')[0] #grab yyyy from yyyy-mm-dd
         

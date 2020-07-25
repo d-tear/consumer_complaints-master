@@ -54,15 +54,16 @@ def generate_report(input_csv_file, output_csv_file):
    
     input_csv_file : string type, the path to the csv file of consumer complaints ("/Users/davidtyrpak/Desktop/consumer_complaints.csv")
    
-    output_csv_file: string type, the path (including filename) where the report should be generated (e.g. /"Users/davidtyrpak/Desktop/results.csv")
+    output_csv_file: string type, the path (including filename) where the summarized consumer complaint report should be generated (e.g. /"Users/davidtyrpak/Desktop/results.csv")
    
     Returns
    -------------------------
    
-    A nested list of summarized complaints, where each inner list is the summerized data for one finanical product on
-    a given year.
+    Does not return anyting.
    
-    This function also writes the nested list to a csv file inside output_dir
+    Writes a single csv report that shows for each financial product and year, 
+    the total number of complaints, number of companies receiving a complaint, 
+    and the highest percentage of complaints directed at a single company.
    
     """
    

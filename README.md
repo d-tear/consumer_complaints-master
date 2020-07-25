@@ -43,7 +43,7 @@ Note that the problem solving code is located in the `generate_report` function 
 
 This project was written in Python 3.7 (3.7.6 default, Jan  8 2020, 13:42:34) 
 
-Earlier versions of Python 3 also likely work, however they haven't been tested.
+Earlier and later versions of Python 3 also likely work, however they haven't been tested.
 
 Note that consumer_complaints.py uses only the built-in/standard libraries. So there is no need to install any third party libraries.
 

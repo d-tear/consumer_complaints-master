@@ -114,7 +114,7 @@ def generate_report(input_csv_file, output_csv_file):
    
     input_csv_file : string type, the path to the csv file of consumer complaints ("/Users/davidtyrpak/Desktop/consumer_complaints.csv")
    
-    output_csv_file: string type, the path (including filename) where the summarized consumer complaint report should be generated (e.g. /"Users/davidtyrpak/Desktop/results.csv")
+    output_csv_file: string type, the path (including filename) where the summarized consumer complaint report should be generated (e.g. /"Users/davidtyrpak/Desktop/report.csv")
    
     Returns
    -------------------------
@@ -162,7 +162,7 @@ def generate_report(input_csv_file, output_csv_file):
     
     current_year = current_date.split('-')[0] #grab yyyy from yyyy-mm-dd
     
-    current_product = sorted_data[0]['Product']
+    current_product = sorted_data[0]['Product'].lower() #grab product name and make it lowercase
     
     
     product_complaint_counter = 0 #total number of complaints received for that product and year
@@ -191,7 +191,7 @@ def generate_report(input_csv_file, output_csv_file):
         
         new_year = new_date.split('-')[0] #grab yyyy from yyyy-mm-dd
         
-        new_product = sorted_data[row_counter]['Product']
+        new_product = sorted_data[row_counter]['Product'].lower() #grab product name and make it lowercase
         
         #if the year AND product havent changed AND we are not on the final row
         if new_year == current_year and new_product == current_product and row_counter < (len(sorted_data) - 1):

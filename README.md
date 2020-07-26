@@ -16,14 +16,14 @@ Date received,Product,Sub-product,Issue,Sub-issue,Consumer complaint narrative,C
 2019-11-20,"Credit reporting, credit repair services, or other personal consumer reports",Credit reporting,Incorrect information on your report,Account information incorrect,I would like the credit bureau to correct my XXXX XXXX XXXX XXXX balance. My correct balance is XXXX,Company has responded to the consumer and the CFPB and chooses not to provide a public response,"TRANSUNION INTERMEDIATE HOLDINGS, INC.",TX,77004,,Consent provided,Web,2019-11-20,Closed with explanation,Yes,N/A,3444592
 ```
 
-Assuming you are in the top-level directory of this repository, if the above `complaints.csv` file is located within `./input` ,  a `results.csv` file can be generated inside the `./output` directory with the following command from the linux/macOS terminal:
+Assuming you are in the top-level directory of this repository, if the above `complaints.csv` file is located within `./input` ,  a `report.csv` file can be generated inside the `./output` directory with the following command from the linux/macOS terminal:
 
 
 ```shell
 #same command is also found inside run.sh
-$ python3.7 ./src/consumer_complaints.py ./input/complaints.csv ./output/results.csv
+$ python3.7 ./src/consumer_complaints.py ./input/complaints.csv ./output/report.csv
 ```
-Below is the expected contents of `./output/results.csv`
+Below is the expected contents of `./output/report.csv`
 
 ```
 "credit reporting, credit repair services, or other personal consumer reports",2019,3,2,67
@@ -33,7 +33,7 @@ debt collection,2019,1,1,100
 
 Although the example complaints.csv file is small, a real dataset may contain hundereds of thousands of lines. To ensure scalability, a stable sort of the columns `Date recieved` and `Product` are first performed on complaints.csv. This initial sorting ensures that the rows are organized by year, and by product name within year, and this allows us to make only one pass over the complaints.csv file to gather our summarized data for each year and product for that year (i.e. once product name changes, we know we've collected all relevant data for that product on that year, and once year changes, we know that we've collected all relevant data for that year). 
 
-To ensure that the final results file is organized alphabetically by product name, a nested list of product info for each year is sorted by product name each time new summarized data is added. Although this leads to a lot of potential sorting, in practice, this approach is fast because the data are already sorted by product name within year. I found this approach approx. 3X faster than doing one large sort by product name at the end, and it required a smaller memory footprint. However, this maintained alphabetical ordering could also likely be achieved with a heap/priority queue structure and future work should explore that approach.
+To ensure that the final report file is organized alphabetically by product name, a nested list of product info for each year is sorted by product name each time new summarized data is added. Although this leads to a lot of potential sorting, in practice, this approach is fast because the data are already sorted by product name within year. I found this approach approx. 3X faster than doing one large sort by product name at the end, and it required a smaller memory footprint. However, this maintained alphabetical ordering could also likely be achieved with a heap/priority queue structure and future work should explore that approach.
 
 Note that the problem solving code is located in the `generate_report` function inside `consumer_complaints.py`
 

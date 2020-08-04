@@ -1,1 +1,1 @@
-This is the directory where your souce code would reside
+ Directory where source code and unittest code reside

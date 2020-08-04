@@ -37,6 +37,9 @@ To ensure that the final report file is organized alphabetically by product name
 
 Note that the problem solving code is located in the `generate_report` function inside `consumer_complaints.py`
 
+## Testing
+
+unittests are provided in `./src/testsuite.py`
 
 
 ## Installing / Getting started
